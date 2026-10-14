@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#160810">
+<title>The Blush Protocol 💗</title>
+
+<style>
+:root {
+  --bg: #160810;
+  --wine: #50152f;
+  --pink: #ff9fbc;
+  --light: #ffe7ef;
+  --gold: #f1d5b0;
+  --muted: #d9bac7;
+  --panel: rgba(58, 20, 39, .7);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  color: var(--light);
+  background:
+    radial-gradient(ellipse at top, #4a1730 0%, transparent 48%),
+    radial-gradient(ellipse at bottom right, #31101f, transparent 45%),
+    var(--bg);
+  font-family: Georgia, "Times New Roman", serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+button { font: inherit; }
+button:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+#stars, #floaties {
+  position: fixed; inset: 0; pointer-events: none; overflow: hidden;
+}
+#stars { z-index: 0; }
+.star {
+  position: absolute; width: 2px; height: 2px;
+  border-radius: 50%; background: #fff0f5;
+  animation: twinkle 3s ease-in-out infinite alternate;
+}
+@keyframes twinkle { to { opacity: .2; transform: scale(.6); } }
+#floaties { z-index: 5; }
+.floaty {
+  position: absolute; bottom: -35px;
+  animation: rise linear forwards; opacity: .8;
+}
+@keyframes rise {
+  to { transform: translateY(-110vh) rotate(35deg); opacity: 0; }
+}
+header, main, footer { position: relative; z-index: 1; }
+header { text-align: center; padding: 64px 20px 30px; }
+.eyebrow {
+  font: 11px Arial, sans-serif; letter-spacing: 4px;
+  text-transform: uppercase; color: var(--gold);
+}
+h1 {
+  font-size: clamp(2.6rem, 8vw, 5.2rem);
+  line-height: 1.05; margin: 20px 0; font-weight: normal;
+  letter-spacing: -2px;
+  background: linear-gradient(110deg, #fff0f5, #ff91b3, #f1d5b0);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.subtitle {
+  max-width: 570px; margin: auto; line-height: 1.9;
+  color: var(--muted); font-size: 1.05rem;
+}
+.heart {
+  display: inline-block; font-size: 42px; margin-top: 20px;
+  filter: drop-shadow(0 0 15px #ff648f);
+  animation: beat 1.8s infinite;
+}
+@keyframes beat {
+  0%,100% { transform: scale(1); }
+  15%,45% { transform: scale(1.13); }
+  30%,60% { transform: scale(1); }
+}
+nav {
+  display: flex; justify-content: center; gap: 12px;
+  flex-wrap: wrap; padding: 10px 18px 32px;
+}
+.btn {
+  border: 1px solid #d77b9c; border-radius: 30px;
+  padding: 13px 20px; color: var(--light);
+  background: linear-gradient(135deg, #6b2042, #351222);
+  cursor: pointer; transition: .25s;
+  box-shadow: 0 5px 22px #0003;
+}
+.btn:hover { transform: translateY(-3px); box-shadow: 0 8px 26px #ff6d9b28; }
+.btn.secondary { background: transparent; border-color: #86516a; }
+main { max-width: 950px; padding: 0 18px 60px; margin: auto; }
+.section {
+  display: none; margin: 0 auto 30px; padding: clamp(22px, 5vw, 42px);
+  border: 1px solid #8b4564; border-radius: 25px;
+  background: var(--panel); backdrop-filter: blur(12px);
+  box-shadow: 0 20px 60px #0004;
+  animation: appear .55s ease both;
+}
+.section.active { display: block; }
+@keyframes appear {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+h2 {
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  font-weight: normal; margin: 0 0 14px;
+}
+h3 { color: var(--pink); font-weight: normal; }
+.lead { line-height: 1.9; color: var(--muted); }
+.divider {
+  width: 85px; height: 1px; margin: 24px 0;
+  background: linear-gradient(90deg, var(--pink), transparent);
+}
+.note {
+  padding: 23px; border: 1px solid #9b5470;
+  border-radius: 18px; background: #250d1a;
+  line-height: 1.95; margin: 22px 0;
+}
+.center { text-align: center; }
+.center .divider { margin: 24px auto; }
+.choices {
+  display: grid; grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 15px; margin-top: 25px;
+}
+.choice {
+  border: 1px solid #8b4564; border-radius: 18px;
+  padding: 22px 17px; text-align: left; color: var(--light);
+  background: linear-gradient(145deg, #48172e, #240d19);
+  cursor: pointer; transition: .25s; min-height: 125px;
+}
+.choice:hover { transform: translateY(-4px); border-color: var(--pink); }
+.choice strong { display: block; font-size: 1.12rem; margin-bottom: 9px; }
+.choice span { color: var(--muted); line-height: 1.6; font-size: .94rem; }
+.message {
+  display: none; padding: 20px; margin-top: 18px;
+  border-radius: 15px; background: #200b17;
+  border: 1px solid #80405b; line-height: 1.9;
+  color: var(--light);
+}
+.message.show { display: block; animation: appear .35s ease; }
+.envelopes {
+  display: grid; grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 13px; margin: 25px 0;
+}
+.envelope {
+  background: linear-gradient(155deg, #6d2547, #321021);
+  border: 1px solid #c17a98; color: #ffe9f0;
+  padding: 22px 12px; border-radius: 16px;
+  cursor: pointer; min-height: 130px; transition: .25s;
+}
+.envelope:hover { transform: translateY(-4px) rotate(-1deg); }
+.envelope .emoji { display: block; font-size: 30px; margin-bottom: 12px; }
+.envelope small { display: block; color: #f1c9d8; margin-top: 8px; }
+.quiz {
+  padding: 24px; margin-top: 30px; border-radius: 18px;
+  background: #200b17; border: 1px solid #74405a;
+}
+.quiz-question { font-size: 1.2rem; line-height: 1.7; }
+.quiz-options { display: flex; gap: 10px; flex-wrap: wrap; }
+.quiz-options button {
+  border: 1px solid #a45c7a; background: #48172e;
+  color: var(--light); padding: 11px 15px;
+  border-radius: 22px; cursor: pointer;
+}
+.quiz-options button:hover { background: #702748; }
+#quizFeedback { color: var(--pink); line-height: 1.8; }
+footer {
+  text-align: center; padding: 20px 18px 40px;
+  color: #caa5b5; font-size: .9rem; line-height: 1.8;
+}
+@media(max-width: 600px) {
+  header { padding-top: 48px; }
+  .choices { grid-template-columns: 1fr; }
+  .envelopes { grid-template-columns: 1fr; }
+  .envelope { min-height: auto; }
+  .section { border-radius: 20px; }
+}
+</style>
+</head>
+
+<body>
+<div id="stars"></div>
+<div id="floaties"></div>
+
+<header>
+  <div class="eyebrow">A little world made just for you</div>
+  <h1>The Blush Protocol</h1>
+  <p class="subtitle">
+    For my Bugu, 💗<br>
+    Two little worlds. One heart. And a thousand things I wish
+    I could tell you while holding your hand.
+  </p>
+  <div class="heart">♥</div>
+</header>
+
+<nav aria-label="Choose your world">
+  <button class="btn" onclick="openSection('safe')">🌷 Her Safe Place</button>
+  <button class="btn secondary" onclick="openSection('midnight')">🌙 After Midnight</button>
+</nav>
+
+<main>
+  <!-- SECTION ONE -->
+  <section id="safe" class="section active">
+    <div class="eyebrow">World one · where your heart can rest</div>
+    <h2>Her Safe Place 🌷</h2>
+    <p class="lead">
+      Bugu, you don't always have to be strong. You don't have to
+      explain every silence or hide every little worry. With me,
+      I hope you can simply be yourself.
+    </p>
+
+    <div class="divider"></div>
+
+    <div class="note">
+      <strong style="color:var(--pink)">A little promise for you 🫂</strong><br>
+      I want to listen when your heart feels heavy, celebrate your
+      smallest wins, make you laugh when your day feels difficult,
+      and remind you that you deserve tenderness even on the days
+      you don't feel your best. ❤️
+    </div>
+
+    <h3>Open whichever your heart needs today ✨</h3>
+
+    <div class="choices">
+      <button class="choice" onclick="reveal('hug')">
+        <strong>🫂 A Little Hug</strong>
+        <span>For the days when words aren't enough.</span>
+      </button>
+      <button class="choice" onclick="reveal('letter')">
+        <strong>💌 A Note From My Heart</strong>
+        <span>Something I want you to remember.</span>
+      </button>
+      <button class="choice" onclick="reveal('smile')">
+        <strong>🌸 Your Smile</strong>
+        <span>A tiny reminder of how special you are.</span>
+      </button>
+      <button class="choice" onclick="reveal('promise')">
+        <strong>🤍 A Soft Promise</strong>
+        <span>Love shown through little things.</span>
+      </button>
+    </div>
+
+    <div id="hug" class="message">
+      Come here, Bugu. 🫂 Imagine the kind of hug where you don't
+      have to say anything, don't have to smile, and don't have to
+      pretend everything is okay. Just breathe, relax, and stay
+      for as long as you need. ❤️
+    </div>
+
+    <div id="letter" class="message">
+      My favourite girl, I hope you never forget that your feelings
+      matter. You don't need to be perfect to be loved. I adore the
+      little things that make you you, and I hope I can keep giving
+      you reasons to feel safe, appreciated, and understood. 💗
+    </div>
+
+    <div id="smile" class="message">
+      Your smile has absolutely no business being this powerful,
+      Bugu. 😭💕 One little smile from you and suddenly my brain
+      forgets its entire schedule. How am I supposed to act normal
+      when you're being this cute? 🫠
+    </div>
+
+    <div id="promise" class="message">
+      I can't promise that every day will be perfect. But I can
+      promise to value honest conversations, respect your feelings,
+      celebrate your happiness, and keep learning how to love you
+      in the ways that make you feel loved. 🌷
+    </div>
+
+    <div class="center" style="margin-top:35px">
+      <button class="btn" onclick="openSection('midnight')">
+        Ready for our midnight world? 🌙
+      </button>
+    </div>
+  </section>
+
+  <!-- SECTION TWO -->
+  <section id="midnight" class="section">
+    <div class="eyebrow">World two · just us after midnight</div>
+    <h2>After Midnight 🌙</h2>
+    <p class="lead">
+      The world gets quieter. The lights get softer.
+      And suddenly, there's time for the things we usually
+      hide behind teasing smiles. This little world is for
+      our flirting, our secrets, and our sweetest confessions. ❤️‍🔥
+    </p>
+
+    <div class="divider"></div>
+
+    <div class="note center">
+      <div style="font-size:35px">🌙 💌 🥀</div>
+      <h3>A tiny midnight rule</h3>
+      No pressure. No perfect answers. Just a little mystery,
+      a little teasing, and whatever makes you blush. 😉
+    </div>
+
+    <h3>Choose a secret envelope 💌</h3>
+    <p class="lead">Each envelope has a different little confession inside.</p>
+
+    <div class="envelopes">
+      <button class="envelope" onclick="openEnvelope(0)">
+        <span class="emoji">💌</span>
+        A Little Confession
+        <small>Tap to uncover</small>
+      </button>
+      <button class="envelope" onclick="openEnvelope(1)">
+        <span class="emoji">🌹</span>
+        My Favourite Thing
+        <small>Tap to uncover</small>
+      </button>
+      <button class="envelope" onclick="openEnvelope(2)">
+        <span class="emoji">🤫</span>
+        Just Between Us
+        <small>Tap to uncover</small>
+      </button>
+    </div>
+
+    <div id="envelopeMessage" class="message"></div>
+
+    <div class="divider"></div>
+
+    <h3>Now, let's see who blushes first. 😏</h3>
+    <p class="lead">
+      Three playful questions. Choose the answer that feels right
+      to you — this is for fun, not a test. 💗
+    </p>
+
+    <div class="quiz">
+      <div id="quizCount" class="eyebrow">Question 1 of 3</div>
+      <p id="quizQuestion" class="quiz-question">
+        What would make a simple moment feel romantic?
+      </p>
+      <div id="quizOptions" class="quiz-options">
+        <button onclick="answer(0)">A long hug 🫂</button>
+        <button onclick="answer(1)">A sweet little kiss 💋</button>
+        <button onclick="answer(2)">Quiet time together 🌙</button>
+      </div>
+      <p id="quizFeedback" aria-live="polite"></p>
+    </div>
+
+    <div class="center" style="margin-top:30px">
+      <button class="btn secondary" onclick="openSection('safe')">
+        Back to Her Safe Place 🌷
+      </button>
+    </div>
+  </section>
+</main>
+
+<footer>
+  Made with a soft heart, a little mischief, and lots of love. 💗
+  <br>For Bugu, always.
+</footer>
+
+<script>
+/* Starry background */
+const stars = document.getElementById("stars");
+for (let i = 0; i < 85; i++) {
+  const star = document.createElement("span");
+  star.className = "star";
+  star.style.left = Math.random() * 100 + "%";
+  star.style.top = Math.random() * 100 + "%";
+  star.style.animationDelay = Math.random() * 3 + "s";
+  star.style.animationDuration = (2 + Math.random() * 3) + "s";
+  stars.appendChild(star);
+}
+
+/* Floating hearts and petals */
+function makeFloaty() {
+  const layer = document.getElementById("floaties");
+  const item = document.createElement("span");
+  item.className = "floaty";
+  item.textContent = ["♡", "♥", "✧", "🌸"][Math.floor(Math.random() * 4)];
+  item.style.left = Math.random() * 100 + "%";
+  item.style.fontSize = (12 + Math.random() * 19) + "px";
+  item.style.animationDuration = (7 + Math.random() * 6) + "s";
+  layer.appendChild(item);
+  setTimeout(() => item.remove(), 14000);
+}
+setInterval(makeFloaty, 850);
+
+/* Section navigation */
+function openSection(id) {
+  document.querySelectorAll(".section").forEach(section => {
+    section.classList.remove("active");
+  });
+  document.getElementById(id).classList.add("active");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/* Caring message buttons */
+function reveal(id) {
+  const target = document.getElementById(id);
+  const wasOpen = target.classList.contains("show");
+  document.querySelectorAll("#safe .message").forEach(el => {
+    el.classList.remove("show");
+  });
+  if (!wasOpen) target.classList.add("show");
+}
+
+/* Midnight secret envelopes */
+const secrets = [
+  "Okay, confession time, Bugu. 💗 Sometimes the smallest things about you are the ones that stay in my mind the longest — your expressions, your little reactions, and the way an ordinary conversation can become my favourite part of the day. 🫠",
+  "My favourite thing? The idea of being close enough to share comfortable silence, silly jokes, warm hugs, and those little glances that say more than a whole paragraph ever could. 🌹",
+  "Just between us... 😏 If I could steal one moment from a busy day, it would be a quiet one with you — no rushing, no distractions, just us smiling like we have our own little secret. 🤫❤️"
+];
+
+function openEnvelope(index) {
+  const box = document.getElementById("envelopeMessage");
+  box.textContent = secrets[index];
+  box.classList.add("show");
+}
+
+/* Flirty questions */
+const questions = [
+  {
+    q: "What would make a simple moment feel romantic?",
+    options: ["A long hug 🫂", "A sweet little kiss 💋", "Quiet time together 🌙"],
+    replies: [
+      "A long hug? Bugu wants premium cuddle privileges. Noted. 🫂💗",
+      "Ohooo, someone is feeling romantic today. 😏💋",
+      "Quiet time together sounds lovely — just us and the whole world on pause. 🌙"
+    ]
+  },
+  {
+    q: "Which little message would make you smile at midnight?",
+    options: ["I miss you 💌", "Wish you were here 🥹", "You're on my mind ❤️"],
+    replies: [
+      "Short message, big feelings. 💌",
+      "That one has a dangerous amount of sweetness in it. 🥹",
+      "And now someone's probably smiling at their screen. ❤️"
+    ]
+  },
+  {
+    q: "Final question: what should we choose for our next little moment?",
+    options: ["Cuddles & a movie 🎬", "A late-night talk 🌙", "A spontaneous date 🌹"],
+    replies: [
+      "Cuddles, a movie, and forgetting to watch the movie. Classic. 😂❤️",
+      "Late-night talks have a way of turning into favourite memories. 🌙",
+      "A spontaneous date? Bugu, save a little room for romance. 🌹😉"
+    ]
+  }
+];
+
+let currentQuestion = 0;
+
+function answer(choice) {
+  const feedback = document.getElementById("quizFeedback");
+  const options = document.getElementById("quizOptions");
+  feedback.textContent = questions[currentQuestion].replies[choice];
+
+  if (currentQuestion < questions.length - 1) {
+    currentQuestion++;
+    setTimeout(() => {
+      showQuestion();
+      feedback.textContent = "";
+    }, 1400);
+  } else {
+    options.innerHTML = "";
+    const again = document.createElement("button");
+    again.textContent = "Play again 💗";
+    again.onclick = resetQuiz;
+    options.appendChild(again);
+    document.getElementById("quizCount").textContent = "Midnight mission complete ✨";
+    document.getElementById("quizQuestion").textContent =
+      "And the winner is... whoever gets to see that beautiful smile of yours. 💗";
+  }
+}
+
+function showQuestion() {
+  const q = questions[currentQuestion];
+  document.getElementById("quizCount").textContent =
+    "Question " + (currentQuestion + 1) + " of " + questions.length;
+  document.getElementById("quizQuestion").textContent = q.q;
+
+  const options = document.getElementById("quizOptions");
+  options.innerHTML = "";
+
+  q.options.forEach((label, index) => {
+    const button = document.createElement("button");
+    button.textContent = label;
+    button.onclick = () => answer(index);
+    options.appendChild(button);
+  });
+}
+
+function resetQuiz() {
+  currentQuestion = 0;
+  document.getElementById("quizFeedback").textContent = "";
+  showQuestion();
+}
+
+showQuestion();
+</script>
+</body>
+</html>
